@@ -3,4 +3,4 @@ env/
 __pycache__/
 *.pyc
 .env
-.streamlit/
+data/results.json

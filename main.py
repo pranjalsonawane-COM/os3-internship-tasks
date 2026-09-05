@@ -1,15 +1,22 @@
-from workflow.graph import run_security_workflow
+import json
+from evaluator.runner import evaluate_all
+from evaluator.report import generate_report
 
+def main():
+    with open("data/test_cases.json", "r", encoding="utf-8") as f:
+        test_cases = json.load(f)
 
-event = """
-There were 20 failed login attempts for the same account
-within 2 minutes, followed by a successful login from an
-unusual location.
-"""
+    results = evaluate_all(test_cases)
+    with open("data/results.json", "w", encoding="utf-8") as f:
+        json.dump(results, f, indent=2)
 
+    report = generate_report(results)
+    with open("reports/evaluation_report.md", "w", encoding="utf-8") as f:
+        f.write(report)
 
-print("\n================================")
-print("🛡️ MULTI-AGENT CYBERSECURITY SYSTEM")
-print("================================")
+    print(report)
+    print("\nSaved: data/results.json")
+    print("Saved: reports/evaluation_report.md")
 
-run_security_workflow(event)
+if __name__ == "__main__":
+    main()
